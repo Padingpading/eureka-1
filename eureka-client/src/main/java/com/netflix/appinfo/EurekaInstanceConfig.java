@@ -46,6 +46,7 @@ public interface EurekaInstanceConfig {
      * Get the unique Id (within the scope of the appName) of this instance to be registered with eureka.
      *
      * @return the (appname scoped) unique id for this instance
+     * 实例Id
      */
     String getInstanceId();
 
@@ -53,6 +54,7 @@ public interface EurekaInstanceConfig {
      * Get the name of the application to be registered with eureka.
      *
      * @return string denoting the name.
+     * 应用名
      */
     String getAppname();
 
@@ -60,6 +62,7 @@ public interface EurekaInstanceConfig {
      * Get the name of the application group to be registered with eureka.
      *
      * @return string denoting the name.
+     * 应用分组名称
      */
     String getAppGroupName();
 
@@ -71,6 +74,7 @@ public interface EurekaInstanceConfig {
      * :( public API typos are the worst. I think this was meant to be "OnInit".
      *
      * @return true to immediately start taking traffic, false otherwise.
+     *  实例在注册eureka后，是否能够立即处理请求，可以需要一些处理来可以准备好
      */
     boolean isInstanceEnabledOnit();
 
@@ -79,6 +83,7 @@ public interface EurekaInstanceConfig {
      * traffic.
      *
      * @return the non-secure port on which the instance should receive traffic.
+     * http端口
      */
     int getNonSecurePort();
 
@@ -87,6 +92,7 @@ public interface EurekaInstanceConfig {
      * traffic.
      *
      * @return the secure port on which the instance should receive traffic.
+     * https端口
      */
     int getSecurePort();
 
@@ -96,6 +102,7 @@ public interface EurekaInstanceConfig {
      *
      * @return true if the <code>non-secure</code> port is enabled, false
      *         otherwise.
+     * http端口是否开启
      */
     boolean isNonSecurePortEnabled();
 
@@ -104,6 +111,7 @@ public interface EurekaInstanceConfig {
      * traffic or not.
      *
      * @return true if the <code>secure</code> port is enabled, false otherwise.
+     * https端口是否开启
      */
     boolean getSecurePortEnabled();
 
@@ -121,6 +129,9 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return time in seconds
+     * renew --> 续约
+     * 获取最少续约间隔时长，eureka会按照这个时间不断的发送心跳，
+     * 当eureka server超过最大频率，没有接收到心跳，将会移除该实例
      */
     int getLeaseRenewalIntervalInSeconds();
 
@@ -139,6 +150,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return value indicating time in seconds.
+     * 获取最少过期间隔时长， 超过这个时间没有接受到实例的心跳，可以认为该实例已经失败
      */
     int getLeaseExpirationDurationInSeconds();
 
@@ -154,6 +166,7 @@ public interface EurekaInstanceConfig {
      *
      * @return the string indicating the virtual host name which the clients use
      *         to call this service.
+     * 虚拟主机名， 可以叫VIPAddress
      */
     String getVirtualHostName();
 
@@ -169,6 +182,7 @@ public interface EurekaInstanceConfig {
      *
      * @return the string indicating the secure virtual host name which the
      *         clients use to call this service.
+     * 安全虚拟主机名
      */
     String getSecureVirtualHostName();
 
@@ -179,6 +193,7 @@ public interface EurekaInstanceConfig {
      * launched and it has been disabled for traffic..
      *
      * @return the autoscaling group name associated with this instance.
+     * aws 跳过
      */
     String getASGName();
 
@@ -191,6 +206,7 @@ public interface EurekaInstanceConfig {
      *            otherwise.
      * @return hostname of this instance which is identifiable by other
      *         instances for making remote calls.
+     * 主机名
      */
     String getHostName(boolean refresh);
 
@@ -199,6 +215,7 @@ public interface EurekaInstanceConfig {
      * information is sent to eureka server and can be used by other instances.
      *
      * @return Map containing application-specific metadata.
+     * 元数据 集合
      */
     Map<String, String> getMetadataMap();
 
@@ -209,6 +226,7 @@ public interface EurekaInstanceConfig {
      *
      * @return information that indicates which data center this instance is
      *         deployed in.
+     * 获取数据中心信息
      */
     DataCenterInfo getDataCenterInfo();
 
@@ -218,6 +236,7 @@ public interface EurekaInstanceConfig {
      * using the information supplied in {@link #getHostName(boolean)}.
      *
      * @return the ip address of this instance.
+     * 获取ip地址
      */
     String getIpAddress();
 
@@ -235,6 +254,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return - relative <code>URL</code> that specifies the status page.
+     * statusPageUrl  relative
      */
     String getStatusPageUrlPath();
 
@@ -255,6 +275,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return absolute status page URL of this instance.
+     * statusPageUrl absolute
      */
     String getStatusPageUrl();
 
@@ -271,6 +292,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return relative <code>URL</code> that specifies the home page.
+     * homePageUrl relative
      */
     String getHomePageUrlPath();
 
@@ -289,6 +311,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return absolute home page URL of this instance.
+     * homePageUrl absolute
      */
     String getHomePageUrl();
 
@@ -307,6 +330,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return - relative <code>URL</code> that specifies the health check page.
+     * healtheCheckUrl relative
      */
     String getHealthCheckUrlPath();
 
@@ -328,6 +352,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return absolute health check page URL of this instance.
+     * healthCheckUrl absolute
      */
     String getHealthCheckUrl();
 
@@ -349,6 +374,7 @@ public interface EurekaInstanceConfig {
      * </p>
      *
      * @return absolute health check page URL of this instance.
+     * 安全healthCheckUrl
      */
     String getSecureHealthCheckUrl();
 
@@ -370,6 +396,7 @@ public interface EurekaInstanceConfig {
     /**
      * Get the namespace used to find properties.
      * @return the namespace used to find properties.
+     * 名称空间
      */
     String getNamespace();
 

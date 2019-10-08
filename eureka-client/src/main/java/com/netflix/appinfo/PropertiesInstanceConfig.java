@@ -47,11 +47,17 @@ import static com.netflix.appinfo.PropertyBasedInstanceConfigConstants.*;
  *
  * @author Karthik Ranganathan
  *
+ *  基于配置文件的抽象类   -->  eureka-client.properties
+ *
+ *  eureka-client-<eureka.environment>.properties
  */
 public abstract class PropertiesInstanceConfig extends AbstractInstanceConfig implements EurekaInstanceConfig {
 
+    // 名称空间
     protected final String namespace;
+    // 配置文件对象
     protected final DynamicPropertyFactory configInstance;
+    // 应用分组名称，从环境变量中获取
     private String appGrpNameFromEnv;
 
     public PropertiesInstanceConfig() {
@@ -70,13 +76,16 @@ public abstract class PropertiesInstanceConfig extends AbstractInstanceConfig im
     public PropertiesInstanceConfig(String namespace, DataCenterInfo info) {
         super(info);
 
+        // 加后缀'.'
         this.namespace = namespace.endsWith(".")
                 ? namespace
                 : namespace + ".";
 
+        // 获取应用分组名称
         appGrpNameFromEnv = ConfigurationManager.getConfigInstance()
                 .getString(FALLBACK_APP_GROUP_KEY, Values.UNKNOWN_APPLICATION);
 
+        // 读取eureka-client配置文件
         this.configInstance = Archaius1Utils.initConfig(CommonConstants.CONFIG_FILE_NAME);
     }
 

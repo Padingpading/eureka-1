@@ -25,6 +25,11 @@ import javax.inject.Singleton;
  *
  * @author Karthik Ranganathan
  *
+ * 非AWS的数据中心
+ *
+ * 在spring cloud eureka中，重新实现了EurekaInstanceConfig接口
+ * @link org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean
+ *
  */
 @Singleton
 @ProvidedBy(MyDataCenterInstanceConfigProvider.class)
