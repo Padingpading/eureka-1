@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Karthik Ranganathan, Greg Kim
  *
- * 应用信息管理器 -- 需要注册到eureka server
+ * 应用信息管理器 -- 注册到eureka server的必要信息
  */
 @Singleton
 public class ApplicationInfoManager {

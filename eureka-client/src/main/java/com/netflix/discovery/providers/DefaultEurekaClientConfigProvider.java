@@ -22,6 +22,7 @@ public class DefaultEurekaClientConfigProvider implements Provider<EurekaClientC
     
     @Override
     public synchronized EurekaClientConfig get() {
+        // 创建eurekaClientConfig对象
         if (config == null) {
             config = (namespace == null)
                     ? new DefaultEurekaClientConfig()

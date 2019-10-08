@@ -9,16 +9,19 @@ public interface EurekaTransportConfig {
 
     /**
      * @return the reconnect inverval to use for sessioned clients
+     * eurekaHttpClient会话重连时间
      */
     int getSessionedClientReconnectIntervalSeconds();
 
     /**
      * @return the percentage of the full endpoints set above which the quarantine set is cleared in the range [0, 1.0]
+     * 请求失败的eureka server占eureka server全部集合的百分比，超过就clear
      */
     double getRetryableClientQuarantineRefreshPercentage();
 
     /**
      * @return the max staleness threshold tolerated by the applications resolver
+     * 应用程序解析器允许的最大过时阈值
      */
     int getApplicationsResolverDataStalenessThresholdSeconds();
 
@@ -42,6 +45,7 @@ public interface EurekaTransportConfig {
 
     /**
      * @return the max threadpool size for the async resolver's executor
+     * 异步解析线程池大小
      */
     int getAsyncExecutorThreadPoolSize();
 
