@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 虚拟ip地址解析器
+ */
 public class Archaius1VipAddressResolver implements VipAddressResolver {
 
     private static final Logger logger = LoggerFactory.getLogger(Archaius1VipAddressResolver.class);
@@ -21,6 +24,7 @@ public class Archaius1VipAddressResolver implements VipAddressResolver {
 
         String result = vipAddressMacro;
 
+        // pattern是${}， 例如${name}，就是在环境变量中查找name的value，将${name}替换为value值
         Matcher matcher = VIP_ATTRIBUTES_PATTERN.matcher(result);
         while (matcher.find()) {
             String key = matcher.group(1);

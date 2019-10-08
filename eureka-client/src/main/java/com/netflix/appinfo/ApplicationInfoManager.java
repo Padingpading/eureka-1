@@ -43,6 +43,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Karthik Ranganathan, Greg Kim
  *
+ * 应用信息管理器 -- 需要注册到eureka server
  */
 @Singleton
 public class ApplicationInfoManager {
@@ -55,12 +56,16 @@ public class ApplicationInfoManager {
         }
     };
 
+    // 单例模式
     private static ApplicationInfoManager instance = new ApplicationInfoManager(null, null, null);
 
     protected final Map<String, StatusChangeListener> listeners;
+    // 实例状态映射
     private final InstanceStatusMapper instanceStatusMapper;
 
+    // 实例信息
     private InstanceInfo instanceInfo;
+    // eureka实例配置信息
     private EurekaInstanceConfig config;
 
     public static class OptionalArgs {
@@ -79,6 +84,8 @@ public class ApplicationInfoManager {
     /**
      * public for DI use. This class should be in singleton scope so do not create explicitly.
      * Either use DI or create this explicitly using one of the other public constructors.
+     *
+     * 构造函数 ，就是设置config(实例配置)、instanceInfo（实例信息）、listeners（监听器）、instanceStatusMapper（实例状态映射）
      */
     @Inject
     public ApplicationInfoManager(EurekaInstanceConfig config, InstanceInfo instanceInfo, OptionalArgs optionalArgs) {

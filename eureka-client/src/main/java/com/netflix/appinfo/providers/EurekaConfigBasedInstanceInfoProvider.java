@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author elandau
  *
+ *  instanceInfo提供者， 使用EurekaInstanceConfig
  */
 @Singleton
 public class EurekaConfigBasedInstanceInfoProvider implements Provider<InstanceInfo> {
@@ -46,18 +47,22 @@ public class EurekaConfigBasedInstanceInfoProvider implements Provider<InstanceI
     public synchronized InstanceInfo get() {
         if (instanceInfo == null) {
             // Build the lease information to be passed to the server based on config
+            // 设置续约时间，过期时间，创建租赁信息构建器
             LeaseInfo.Builder leaseInfoBuilder = LeaseInfo.Builder.newBuilder()
                     .setRenewalIntervalInSecs(config.getLeaseRenewalIntervalInSeconds())
                     .setDurationInSecs(config.getLeaseExpirationDurationInSeconds());
 
+            // 创建VIPAddress解析器
             if (vipAddressResolver == null) {
                 vipAddressResolver = new Archaius1VipAddressResolver();
             }
 
             // Builder the instance information to be registered with eureka server
+            // 创建实例信息构建器
             InstanceInfo.Builder builder = InstanceInfo.Builder.newBuilder(vipAddressResolver);
 
             // set the appropriate id for the InstanceInfo, falling back to datacenter Id if applicable, else hostname
+            // 设置instanceId
             String instanceId = config.getInstanceId();
             if (instanceId == null || instanceId.isEmpty()) {
                 DataCenterInfo dataCenterInfo = config.getDataCenterInfo();
@@ -68,6 +73,7 @@ public class EurekaConfigBasedInstanceInfoProvider implements Provider<InstanceI
                 }
             }
 
+            // 获取地址
             String defaultAddress;
             if (config instanceof RefreshableInstanceConfig) {
                 // Refresh AWS data center info, and return up to date address
@@ -81,6 +87,7 @@ public class EurekaConfigBasedInstanceInfoProvider implements Provider<InstanceI
                 defaultAddress = config.getIpAddress();
             }
 
+            // 设置信息
             builder.setNamespace(config.getNamespace())
                     .setInstanceId(instanceId)
                     .setAppName(config.getAppname())
@@ -102,6 +109,7 @@ public class EurekaConfigBasedInstanceInfoProvider implements Provider<InstanceI
 
 
             // Start off with the STARTING state to avoid traffic
+            // 实例在初始化时启动
             if (!config.isInstanceEnabledOnit()) {
                 InstanceStatus initialStatus = InstanceStatus.STARTING;
                 LOG.info("Setting initial instance status as: {}", initialStatus);
@@ -113,6 +121,7 @@ public class EurekaConfigBasedInstanceInfoProvider implements Provider<InstanceI
             }
 
             // Add any user-specific metadata information
+            // 设置用户特定的元数据
             for (Map.Entry<String, String> mapEntry : config.getMetadataMap().entrySet()) {
                 String key = mapEntry.getKey();
                 String value = mapEntry.getValue();
@@ -122,6 +131,7 @@ public class EurekaConfigBasedInstanceInfoProvider implements Provider<InstanceI
                 }
             }
 
+            // 创建instanceInfo对象，设置租赁信息
             instanceInfo = builder.build();
             instanceInfo.setLeaseInfo(leaseInfoBuilder.build());
         }
