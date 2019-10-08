@@ -6,6 +6,8 @@ import com.netflix.discovery.shared.Applications;
 
 /**
  * @author Nitesh Kant
+ *
+ * eureka对于backupRegistry提供空实现
  */
 @Singleton
 public class NotImplementedRegistryImpl implements BackupRegistry {

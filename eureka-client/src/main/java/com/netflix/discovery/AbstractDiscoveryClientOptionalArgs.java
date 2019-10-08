@@ -24,18 +24,23 @@ import com.netflix.eventbus.spi.EventBus;
 public abstract class AbstractDiscoveryClientOptionalArgs<T> {
     Provider<HealthCheckCallback> healthCheckCallbackProvider;
 
+    // 健康检查处理器工厂
     Provider<HealthCheckHandler> healthCheckHandlerProvider;
 
+    // 注册到eureka server之前的处理器 ， spring cloud 中提供了实现 org.springframework.cloud.netflix.eureka.EurekaHealthCheckHandler
     PreRegistrationHandler preRegistrationHandler;
 
+    // 过滤器  通过泛型来支持 ClientFilter (jersey 1.x) | ClientRequestFilter (jersey 2.x) , 在DiscoveryClient中使用的ClientFilter
     Collection<T> additionalFilters;
 
     EurekaJerseyClient eurekaJerseyClient;
     
     TransportClientFactory transportClientFactory;
-    
+
+    // 生成Jersey客户端的工厂接口
     TransportClientFactories transportClientFactories;
 
+    // eureka事件监听器集合
     private Set<EurekaEventListener> eventListeners;
 
     private Optional<SSLContext> sslContext = Optional.empty();

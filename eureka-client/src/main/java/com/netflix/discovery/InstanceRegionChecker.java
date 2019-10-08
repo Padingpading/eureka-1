@@ -15,7 +15,9 @@ import org.slf4j.LoggerFactory;
 public class InstanceRegionChecker {
     private static Logger logger = LoggerFactory.getLogger(InstanceRegionChecker.class);
 
+    // AWS。。。
     private final AzToRegionMapper azToRegionMapper;
+    // 本地须臾
     private final String localRegion;
 
     InstanceRegionChecker(AzToRegionMapper azToRegionMapper, String localRegion) {

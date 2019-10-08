@@ -25,6 +25,9 @@ import com.netflix.discovery.shared.LookupService;
  *  - provide the ability to register and access the healthcheck handler for the client
  *
  * @author David Liu
+ *
+ * 定义了多种获取applications（应用集合）的方法
+ * 定义了多种获取InstanceInfo（实例信息）的方法
  */
 @ImplementedBy(DiscoveryClient.class)
 public interface EurekaClient extends LookupService {
