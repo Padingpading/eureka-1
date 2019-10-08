@@ -232,14 +232,21 @@ public class EurekaClientServerRestIntegrationTest {
     }
 
     private static void startServer() throws Exception {
-        File warFile = findWar();
+        //File warFile = findWar();
 
         server = new Server(8080);
 
-        WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath("/");
-        webapp.setWar(warFile.getAbsolutePath());
-        server.setHandler(webapp);
+        //WebAppContext webapp = new WebAppContext();
+        //webapp.setContextPath("/");
+        //webapp.setWar(warFile.getAbsolutePath());
+        //server.setHandler(webapp);
+
+        String basePath = "/Users/ooooo/Code/Self/source-code/eureka/eureka-server/src/main";
+        WebAppContext webAppCtx = new WebAppContext(new File(basePath + "/webapp").getAbsolutePath(), "/");
+        webAppCtx.setDescriptor(new File(basePath + "/webapp/WEB-INF/web.xml").getAbsolutePath());
+        webAppCtx.setResourceBase(new File(basePath + "/resources").getAbsolutePath());
+        webAppCtx.setClassLoader(Thread.currentThread().getContextClassLoader());
+        server.setHandler(webAppCtx);
 
         server.start();
 
