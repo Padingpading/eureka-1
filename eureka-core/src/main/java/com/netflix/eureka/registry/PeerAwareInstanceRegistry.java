@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * @author Tomasz Bak
+ * 对等感知实例注册接口， 用于集群内注册信息的同步服务
  */
 public interface PeerAwareInstanceRegistry extends InstanceRegistry {
 

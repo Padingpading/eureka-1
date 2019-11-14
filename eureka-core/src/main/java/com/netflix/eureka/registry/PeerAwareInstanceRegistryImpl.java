@@ -89,6 +89,7 @@ import javax.inject.Singleton;
  *
  */
 @Singleton
+// 对等感知实例注册实现类
 public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry implements PeerAwareInstanceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(PeerAwareInstanceRegistryImpl.class);
 
