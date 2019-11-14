@@ -32,6 +32,7 @@ import com.netflix.eureka.registry.AbstractInstanceRegistry;
  * @author Karthik Ranganathan, Greg Kim
  *
  * @param <T>
+ * eureka 租赁管理器 （写服务操作）
  */
 public interface LeaseManager<T> {
 

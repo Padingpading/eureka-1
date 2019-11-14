@@ -93,6 +93,7 @@ public class DefaultEurekaServerConfig implements EurekaServerConfig {
     private final DynamicStringProperty myUrl = configInstance.getStringProperty(namespace + "myUrl", null);
 
     public DefaultEurekaServerConfig() {
+        // init
         init();
     }
 
@@ -102,6 +103,7 @@ public class DefaultEurekaServerConfig implements EurekaServerConfig {
     }
 
     private void init() {
+        // 环境参数
         String env = ConfigurationManager.getConfigInstance().getString(
                 EUREKA_ENVIRONMENT, TEST);
         ConfigurationManager.getConfigInstance().setProperty(
