@@ -103,16 +103,19 @@ public class DefaultEurekaServerConfig implements EurekaServerConfig {
     }
 
     private void init() {
-        // 环境参数
+        // 环境参数eureka.environment 默认为test
         String env = ConfigurationManager.getConfigInstance().getString(
                 EUREKA_ENVIRONMENT, TEST);
+        //archaius.deployment.environment,默认为test
         ConfigurationManager.getConfigInstance().setProperty(
                 ARCHAIUS_DEPLOYMENT_ENVIRONMENT, env);
-
+        //加载的eureka配置文件名称
+        //配置eureka.server.props
+        //默认值eureka-server
         String eurekaPropsFile = EUREKA_PROPS_FILE.get();
         try {
-            // ConfigurationManager
-            // .loadPropertiesFromResources(eurekaPropsFile);
+            // 加载配置文件配置。
+            // ConfigurationManager.loadPropertiesFromResources(eurekaPropsFile);
             ConfigurationManager
                     .loadCascadedPropertiesFromResources(eurekaPropsFile);
         } catch (IOException e) {

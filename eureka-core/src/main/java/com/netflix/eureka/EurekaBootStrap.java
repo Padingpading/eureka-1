@@ -112,7 +112,7 @@ public class EurekaBootStrap implements ServletContextListener {
     // 初始化eureka,同步其他eureka节点，发布注册表
     public void contextInitialized(ServletContextEvent event) {
         try {
-            // 初始化eureka环境
+            // 初始化eureka环境 初始化eureka配置。
             initEurekaEnvironment();
             // 初始化eureka服务上下文
             initEurekaServerContext();
@@ -130,8 +130,8 @@ public class EurekaBootStrap implements ServletContextListener {
      */
     protected void initEurekaEnvironment() throws Exception {
         logger.info("Setting the eureka configuration..");
-
-        // 设置dataCenter
+        //  disableDefaultConfig:配置管理弃
+        // 设置dataCenter  初始化archaius.deployment.datacenter:default
         String dataCenter = ConfigurationManager.getConfigInstance().getString(EUREKA_DATACENTER);
         if (dataCenter == null) {
             logger.info("Eureka data center value eureka.datacenter is not set, defaulting to default");
@@ -139,7 +139,7 @@ public class EurekaBootStrap implements ServletContextListener {
         } else {
             ConfigurationManager.getConfigInstance().setProperty(ARCHAIUS_DEPLOYMENT_DATACENTER, dataCenter);
         }
-        // 获取eureka环境
+        // 初始化eureka环境 默认  archaius.deployment.environment=test
         String environment = ConfigurationManager.getConfigInstance().getString(EUREKA_ENVIRONMENT);
         if (environment == null) {
             ConfigurationManager.getConfigInstance().setProperty(ARCHAIUS_DEPLOYMENT_ENVIRONMENT, TEST);
@@ -151,7 +151,8 @@ public class EurekaBootStrap implements ServletContextListener {
      * init hook for server context. Override for custom logic.
      */
     protected void initEurekaServerContext() throws Exception {
-        // 创建eurekaServiceConfig
+        // 1、创建eurekaServiceConfig
+        //eurekaServiceConfig:加载eureka-server.properties配置。
         EurekaServerConfig eurekaServerConfig = new DefaultEurekaServerConfig();
 
         // For backward compatibility
@@ -164,7 +165,7 @@ public class EurekaBootStrap implements ServletContextListener {
         // 创建 Eureka-Server 请求和响应编解码器
         ServerCodecs serverCodecs = new DefaultServerCodecs(eurekaServerConfig);
 
-        // eureka server 内部有eureka client，用于与其他eureka client通信
+        //2、 eureka server 内部有eureka client，用于与其他eureka client通信
         ApplicationInfoManager applicationInfoManager = null;
 
         if (eurekaClient == null) {
@@ -181,7 +182,7 @@ public class EurekaBootStrap implements ServletContextListener {
             applicationInfoManager = eurekaClient.getApplicationInfoManager();
         }
 
-        // 节点注册对象
+        // 3、节点注册对象
         PeerAwareInstanceRegistry registry;
         if (isAws(applicationInfoManager.getInfo())) {
             registry = new AwsInstanceRegistry(
@@ -201,7 +202,7 @@ public class EurekaBootStrap implements ServletContextListener {
             );
         }
 
-        // 根据registry来获取eureka server节点
+        // 4、根据registry来获取eureka server节点
         PeerEurekaNodes peerEurekaNodes = getPeerEurekaNodes(
                 registry,
                 eurekaServerConfig,
@@ -210,7 +211,7 @@ public class EurekaBootStrap implements ServletContextListener {
                 applicationInfoManager
         );
 
-        // 创建eureka server上下文
+        //5、创建eureka server上下文
         serverContext = new DefaultEurekaServerContext(
                 eurekaServerConfig,
                 serverCodecs,
@@ -225,11 +226,11 @@ public class EurekaBootStrap implements ServletContextListener {
         logger.info("Initialized server context");
 
         // Copy registry from neighboring eureka node
-        // 从其他 Eureka-Server 拉取注册信息
+        // 6、从其他 Eureka-Server 拉取注册信息
         int registryCount = registry.syncUp();
         registry.openForTraffic(applicationInfoManager, registryCount);
 
-        // 注册监控
+        // 7、注册监控
         // Register all monitoring statistics.
         EurekaMonitors.registerAllStats();
     }
