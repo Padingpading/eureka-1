@@ -88,7 +88,7 @@ public enum EurekaMonitors {
     }
 
     @com.netflix.servo.annotations.Monitor(name = "count", type = DataSourceType.COUNTER)
-    private final AtomicLong counter = new AtomicLong();
+    private final AtomicLong counter = new AtomicLong();//计数器
 
     @com.netflix.servo.annotations.Monitor(name = "count-minus-replication", type = DataSourceType.COUNTER)
     private final AtomicLong myZoneCounter = new AtomicLong();

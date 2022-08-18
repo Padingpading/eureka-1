@@ -74,9 +74,10 @@ public abstract class PropertiesInstanceConfig extends AbstractInstanceConfig im
     }
 
     public PropertiesInstanceConfig(String namespace, DataCenterInfo info) {
+        //匿名获取名称
         super(info);
 
-        // 加后缀'.'
+        // 加后缀'.' eureka.
         this.namespace = namespace.endsWith(".")
                 ? namespace
                 : namespace + ".";

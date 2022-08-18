@@ -49,13 +49,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
            <%
            EurekaServerContext serverContext = (EurekaServerContext) pageContext.getServletContext()
                    .getAttribute(EurekaServerContext.class.getName());
+           //应用服务信息
            for(Application app : serverContext.getRegistry().getSortedApplications()) {
                out.print("<tr><td><b>" + app.getName() + "</b></td>");
                Map<String, Integer> amiCounts = new HashMap<String, Integer>();
                Map<InstanceStatus,List<Pair<String, String>>> instancesByStatus =
                    new HashMap<InstanceStatus, List<Pair<String,String>>>();
                Map<String,Integer> zoneCounts = new HashMap<String, Integer>();
-               
+
+               //服务的每个实例
                for(InstanceInfo info : app.getInstances()){
                    String id = info.getId();
                    String url = info.getStatusPageUrl();

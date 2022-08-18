@@ -1,7 +1,7 @@
 apply plugin: 'application'
 
 dependencies {
-    compile project(':eureka-client')
+    compile project(':-client')
     compile files('conf')
 
     compile "com.netflix.governator:governator:${governatorVersion}"

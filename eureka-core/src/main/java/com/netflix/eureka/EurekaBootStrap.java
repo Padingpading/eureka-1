@@ -80,7 +80,10 @@ public class EurekaBootStrap implements ServletContextListener {
     private static final String ARCHAIUS_DEPLOYMENT_DATACENTER = "archaius.deployment.datacenter";
 
     private static final String EUREKA_DATACENTER = "eureka.datacenter";
-
+    
+    /**
+     * eureka server的上线文
+     */
     protected volatile EurekaServerContext serverContext;
     protected volatile AwsBinder awsBinder;
     
@@ -117,6 +120,7 @@ public class EurekaBootStrap implements ServletContextListener {
             // 初始化eureka服务上下文
             initEurekaServerContext();
 
+            //设置EurekaServerContext 上线文到 servlet上线文中。
             ServletContext sc = event.getServletContext();
             sc.setAttribute(EurekaServerContext.class.getName(), serverContext);
         } catch (Throwable e) {
@@ -167,22 +171,24 @@ public class EurekaBootStrap implements ServletContextListener {
 
         //2、 eureka server 内部有eureka client，用于与其他eureka client通信
         ApplicationInfoManager applicationInfoManager = null;
-
         if (eurekaClient == null) {
+            //加载eureka-client.properties配置文件。
+            //EurekaInstanceConfig获取client的配置接口。从云上读配置文件。
             EurekaInstanceConfig instanceConfig = isCloud(ConfigurationManager.getDeploymentContext())
                     ? new CloudInstanceConfig()
                     : new MyDataCenterInstanceConfig();
-            
+            //eureka
             applicationInfoManager = new ApplicationInfoManager(
                     instanceConfig, new EurekaConfigBasedInstanceInfoProvider(instanceConfig).get());
-            
+            //eureka-server本身也是个eureka-client
             EurekaClientConfig eurekaClientConfig = new DefaultEurekaClientConfig();
+            //调度任务启动。
             eurekaClient = new DiscoveryClient(applicationInfoManager, eurekaClientConfig);
         } else {
             applicationInfoManager = eurekaClient.getApplicationInfoManager();
         }
 
-        // 3、节点注册对象
+        // 3、节点注册对象,注册到其他eureka的节点实例对象。
         PeerAwareInstanceRegistry registry;
         if (isAws(applicationInfoManager.getInfo())) {
             registry = new AwsInstanceRegistry(
@@ -202,7 +208,7 @@ public class EurekaBootStrap implements ServletContextListener {
             );
         }
 
-        // 4、根据registry来获取eureka server节点
+        // 4、eureke-server集群。根据registry来获取eureka server节点
         PeerEurekaNodes peerEurekaNodes = getPeerEurekaNodes(
                 registry,
                 eurekaServerConfig,
@@ -211,7 +217,7 @@ public class EurekaBootStrap implements ServletContextListener {
                 applicationInfoManager
         );
 
-        //5、创建eureka server上下文
+        //5、创建eureka server上下文,eureka-server的所有东西。
         serverContext = new DefaultEurekaServerContext(
                 eurekaServerConfig,
                 serverCodecs,
@@ -219,15 +225,19 @@ public class EurekaBootStrap implements ServletContextListener {
                 peerEurekaNodes,
                 applicationInfoManager
         );
-
+        //讲eureka-server初始化为静态变量。
         EurekaServerContextHolder.initialize(serverContext);
-
+        //eureka-server启动
+        // 更新eureka server集群信息
+        //给予eureka server 的集群信息初始化注册表
         serverContext.initialize();
         logger.info("Initialized server context");
 
         // Copy registry from neighboring eureka node
         // 6、从其他 Eureka-Server 拉取注册信息
-        int registryCount = registry.syncUp();
+            int registryCount = registry.syncUp();
+        
+        //
         registry.openForTraffic(applicationInfoManager, registryCount);
 
         // 7、注册监控

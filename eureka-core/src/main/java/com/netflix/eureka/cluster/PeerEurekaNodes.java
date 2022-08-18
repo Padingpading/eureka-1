@@ -84,11 +84,15 @@ public class PeerEurekaNodes {
                 }
         );
         try {
+            //从配置文件中加载其他eureka-server地址,设置到 Set<String> peerEurekaNodeUrls
             updatePeerEurekaNodes(resolvePeerUrls());
+            //更新eureka-server的信息让当前的eureka-server感知其他的eureka-server
+            //然后搞一个定时调度任务。
             Runnable peersUpdateTask = new Runnable() {
                 @Override
                 public void run() {
                     try {
+                        //启动后台线程
                         updatePeerEurekaNodes(resolvePeerUrls());
                     } catch (Throwable e) {
                         logger.error("Cannot update the replica Nodes", e);
@@ -96,6 +100,7 @@ public class PeerEurekaNodes {
 
                 }
             };
+            //定时10分钟执行一次,更新Eureka-server节点。
             taskExecutor.scheduleWithFixedDelay(
                     peersUpdateTask,
                     serverConfig.getPeerEurekaNodesUpdateIntervalMs(),
@@ -186,6 +191,7 @@ public class PeerEurekaNodes {
         if (!toAdd.isEmpty()) {
             logger.info("Adding new peer nodes {}", toAdd);
             for (String peerUrl : toAdd) {
+                //创建集群节点。
                 newNodeList.add(createPeerEurekaNode(peerUrl));
             }
         }
