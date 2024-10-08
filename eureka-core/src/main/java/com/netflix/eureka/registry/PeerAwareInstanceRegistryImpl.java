@@ -97,6 +97,7 @@ public class PeerAwareInstanceRegistryImpl extends AbstractInstanceRegistry impl
     private static final int PRIME_PEER_NODES_RETRY_MS = 30000;
 
     private long startupTime = 0;
+    
     private boolean peerInstancesTransferEmptyOnStartup = true;
 
     public enum Action {
